@@ -1,0 +1,27 @@
+{
+  "companyInfo": {
+    "name": "주식회사 팀스파르타",
+    "desctiption": "우리회사에 대한 설명입니다. blablabla~~~~~~",
+    "image": "http://~~~~"
+  },
+  "todos": [
+    {
+      "id": "1",
+      "title": "커피 마시기",
+      "contents": "샌드커피 마시기",
+      "isDone": false
+    },
+    {
+      "id": "2",
+      "title": "영화 보기",
+      "contents": "파묘 2회차",
+      "isDone": false
+    },
+    {
+      "id": "3",
+      "title": "next.js 복습하기",
+      "contents": "과제 늦지않게 제출하기",
+      "isDone": false
+    }
+  ]
+}
