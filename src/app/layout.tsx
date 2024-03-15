@@ -19,21 +19,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Link href="/" className="grid justify-items-stretch">
-          home
-        </Link>
-        <Link href="/about" className="grid justify-items-stretch">
-          about
-        </Link>
-        <Link href="/report" className="grid justify-items-stretch">
-          report
-        </Link>
-        <Link href="/rendering/csr" className="grid justify-items-stretch">
-          todos-csr
-        </Link>
-        <Link href="/rendering/ssr" className="grid justify-items-stretch">
-          todos-ssr
-        </Link>
+        <nav className="flex sm:justify-center space-x-4">
+          {[
+            ["Home", "/"],
+            ["   about", "/about"],
+            [" report", "/report"],
+            ["todos-csr", "/rendering/csr"],
+            ["todos-ssr", "/rendering/ssr"],
+          ].map(([title, url]) => (
+            <Link
+              href={url}
+              className="rounded-lg px-3 py-2 text-slate-700 font-medium hover:bg-slate-100 hover:text-slate-900"
+            >
+              {title}
+            </Link>
+          ))}
+        </nav>
         <div>
           <QueryProvider>{children}</QueryProvider>
         </div>
