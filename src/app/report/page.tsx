@@ -1,10 +1,12 @@
-import React from "react";
 import type { Todo } from "../tyeps";
+
+//페이지 옵션
+//export const revalidate = 10;
 
 //todos의 통계 정보를 ISR로 구현하는 페이지
 const ReportPage = async () => {
   const response = await fetch(`http://localhost:4000/todos`, {
-    next: { revalidate: 10 },
+    next: { revalidate: 10 }, //fetch 옵션
   });
 
   const todos: Todo[] = await response.json();

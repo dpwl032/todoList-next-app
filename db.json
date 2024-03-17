@@ -1,7 +1,7 @@
 {
   "companyInfo": {
     "name": "주식회사 팀스파르타",
-    "desctiption": "우리회사에 대한 설명입니다.",
+    "description": "우리회사에 대한 설명입니다.",
     "image": "https://images.unsplash.com/photo-1710381473369-7c75ff666f8d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
   },
   "todos": [
@@ -9,13 +9,19 @@
       "id": "3",
       "title": "next.js 복습하기",
       "contents": "과제 늦지않게 제출하기",
+      "isDone": true
+    },
+    {
+      "id": "f63d",
+      "title": "1",
+      "contents": "1",
       "isDone": false
     },
     {
-      "id": "3aac",
-      "title": "zz",
-      "contents": "zz",
-      "isDone": false
+      "id": "ec61",
+      "title": "ㅊㅊ",
+      "contents": "ㅊㅊ",
+      "isDone": true
     }
   ]
 }

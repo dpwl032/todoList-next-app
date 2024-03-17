@@ -1,8 +1,12 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
+import Link from "next/link";
 import MoveButton from "@/components/MoveButton";
-import type { NewTodo, Todo, EditTodo } from "@/app/tyeps";
+import QUERY_KEYS from "@/api/keys.constant";
+import { deleteTodo, addTodo, editTodo } from "@/api/mutation";
+
+import type { Todo } from "@/app/tyeps";
 
 //todoList의 목록을 만드는 페이지를 CSR 렌더링 방식
 const CsrPage = () => {
@@ -11,13 +15,24 @@ const CsrPage = () => {
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
 
+  const submitTodo = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!title || !contents) {
+      alert("빈 칸없이 작성해주세요!");
+      return;
+    }
+
+    newTodoMutation.mutate({ title, contents });
+    alert("추가완료");
+  };
+
   //조회
   const {
     data: todos,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["todos"],
+    queryKey: [QUERY_KEYS.TODOS],
     queryFn: async () => {
       const response = await fetch(`http://localhost:3000/api/todos`);
       const todos = await response.json();
@@ -28,62 +43,32 @@ const CsrPage = () => {
 
   //추가
   const newTodoMutation = useMutation({
-    mutationFn: async (newTodo: NewTodo) => {
-      const response = await fetch(`http://localhost:3000/api/todos`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...newTodo, isDone: false }),
-      });
-      const todo = await response.json();
-      return todo;
-    },
+    mutationFn: addTodo,
     onSuccess: () => {
       setTitle("");
       setContents("");
-
       queryClient.invalidateQueries({
-        queryKey: ["todos"],
+        queryKey: [QUERY_KEYS.TODOS],
       });
     },
   });
 
   //삭제
   const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const response = await fetch(`http://localhost:3000/api/todos/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const todo = await response.json();
-      return todo;
-    },
+    mutationFn: deleteTodo,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["todos"],
+        queryKey: [QUERY_KEYS.TODOS],
       });
     },
   });
 
   //수정
   const editMutation = useMutation({
-    mutationFn: async ({ id, isDone }: EditTodo) => {
-      const response = await fetch(`http://localhost:3000/api/todos/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ isDone: !isDone }),
-      });
-      const updatedTodo = await response.json();
-      return updatedTodo;
-    },
+    mutationFn: editTodo,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["todos"],
+        queryKey: [QUERY_KEYS.TODOS],
       });
     },
     onError: (error) => {
@@ -107,13 +92,7 @@ const CsrPage = () => {
   return (
     <div>
       <section className="mx-8 my-8 ">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            newTodoMutation.mutate({ title, contents });
-            alert("추가완료");
-          }}
-        >
+        <form onSubmit={submitTodo}>
           <div>
             <label htmlFor="title">Title</label>
             <input
@@ -148,40 +127,128 @@ const CsrPage = () => {
           </button>
         </form>
       </section>
-      {todos.todos.map((todo: Todo) => {
-        return (
-          <div
-            key={todo.id}
-            className="mx-8 my-8 card card-compact w-96 bg-base-100 shadow-xl"
+      <div>
+        <div role="alert" className="mx-8 my-8 alert alert-info">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            className="stroke-current shrink-0 w-6 h-6"
           >
-            <div className="card-body">
-              <h2 className="card-title">{todo.title}</h2>
-              <p>{todo.contents}</p>
-              {todo.isDone ? <p>Done</p> : <p>Not done</p>}
-              <div className="card-actions justify-end">
-                <button
-                  className="btn btn-neutral"
-                  onClick={() => {
-                    alert("삭제하겠습니까?");
-                    deleteMutation.mutate(todo.id);
-                  }}
-                >
-                  삭제
-                </button>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <span>ongoing TodoList</span>
+        </div>
+        {todos.todos
+          .filter((Item: Todo) => Item.isDone === false)
+          .map((todo: Todo) => {
+            return (
+              <div
+                key={todo.id}
+                className="mx-8 my-8 card card-compact w-96 bg-base-100 shadow-xl"
+              >
+                <div className="card-body">
+                  <Link href={`/rendering/csr/${todo.id}`}>
+                    {" "}
+                    <h2 className="card-title">{todo.title}</h2>
+                  </Link>
 
-                <button
-                  className="btn btn-primary"
-                  onClick={() => {
-                    editMutation.mutate({ id: todo.id, isDone: todo.isDone });
-                  }}
-                >
-                  {todo.isDone ? "취소" : "완료"}
-                </button>
+                  <p>{todo.contents}</p>
+                  {todo.isDone ? <p>완료</p> : <p>진행중</p>}
+                  <div className="card-actions justify-end">
+                    <button
+                      className="btn btn-neutral"
+                      onClick={() => {
+                        alert("삭제하겠습니까?");
+                        deleteMutation.mutate(todo.id);
+                      }}
+                    >
+                      삭제
+                    </button>
+
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        editMutation.mutate({
+                          id: todo.id,
+                          isDone: todo.isDone,
+                        });
+                      }}
+                    >
+                      {todo.isDone ? "취소" : "완료"}
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        );
-      })}{" "}
+            );
+          })}{" "}
+      </div>
+      <div>
+        <div role="alert" className="mx-8 my-8 alert alert-success">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="stroke-current shrink-0 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span>Completed TodoList!</span>
+        </div>
+        {todos.todos
+          .filter((Item: Todo) => Item.isDone === true)
+          .map((todo: Todo) => {
+            return (
+              <div
+                key={todo.id}
+                className="mx-8 my-8 card card-compact w-96 bg-base-100 shadow-xl"
+              >
+                <div className="card-body">
+                  <Link href={`/rendering/csr/${todo.id}`}>
+                    {" "}
+                    <h2 className="card-title">{todo.title}</h2>
+                  </Link>
+
+                  <p>{todo.contents}</p>
+                  {todo.isDone ? <p>Done</p> : <p>Not done</p>}
+                  <div className="card-actions justify-end">
+                    <button
+                      className="btn btn-neutral"
+                      onClick={() => {
+                        alert("삭제하겠습니까?");
+                        deleteMutation.mutate(todo.id);
+                      }}
+                    >
+                      삭제
+                    </button>
+
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        editMutation.mutate({
+                          id: todo.id,
+                          isDone: todo.isDone,
+                        });
+                      }}
+                    >
+                      {todo.isDone ? "취소" : "완료"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}{" "}
+      </div>
       <MoveButton />
     </div>
   );

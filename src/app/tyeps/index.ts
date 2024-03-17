@@ -1,6 +1,6 @@
 export type Company = {
   name: string;
-  desctiption: string;
+  description: string;
   image: string;
 };
 
