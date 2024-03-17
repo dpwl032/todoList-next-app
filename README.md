@@ -14,7 +14,7 @@
 
 - Environment : Visual Studio Code
 - Development : typescript, React
-- FRAMEWORK : Next.js
+- Framework : Next.js
 - DB : json-server
 
 <br>
@@ -63,7 +63,7 @@
 - report 페이지 : todos의 통계 정보를 구현하는 페이지, 매 10초마다 결과가 갱신 (ISR,revalidate,useRouter로 페이지 이동)
 - todos CSR 페이지 : react query를 이용해 todoList의 목록을 만드는 페이지 (CSR, CRUD)
 - todos SSR 페이지 : todoList의 목록을 나타내는 페이지 (SSR, Link 태그로 페이지 이동)
-- **할일정보통계보러가기** 버튼이 존재 : CSR, SSR 페이지에만 존재, 버튼 클릭 시 report 페이지로 이동
+- 할일정보통계보러가기 버튼 생성 : CSR, SSR 페이지에만 존재, 버튼 클릭 시 report 페이지로 이동
 </details>
 
 <br>
