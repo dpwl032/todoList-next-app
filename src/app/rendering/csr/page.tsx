@@ -92,16 +92,21 @@ const CsrPage = () => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <span>Loading</span>
+        <span className="loading loading-dots loading-lg"></span>
+      </>
+    );
   }
 
   if (isError) {
     return <div>Error</div>;
   }
+
   return (
     <div>
-      <p>csr</p>
-      <section>
+      <section className="mx-8 my-8 ">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -137,33 +142,43 @@ const CsrPage = () => {
               focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
             />
           </div>
-          <button type="submit">추가하기</button>
+
+          <button type="submit" className="mx-8 my-8 btn btn-accent">
+            추가하기
+          </button>
         </form>
       </section>
       {todos.todos.map((todo: Todo) => {
         return (
           <div
             key={todo.id}
-            className="bg-blue-100 border border-blue-400 text-blue-700 p-8 m-2 rounded"
+            className="mx-8 my-8 card card-compact w-96 bg-base-100 shadow-xl"
           >
-            <h2>{todo.title}</h2>
-            <p>{todo.contents}</p>
-            {todo.isDone ? <p>Done</p> : <p>Not done</p>}
-            <button
-              onClick={() => {
-                alert("삭제하겠습니까?");
-                deleteMutation.mutate(todo.id);
-              }}
-            >
-              삭제
-            </button>
-            <button
-              onClick={() => {
-                editMutation.mutate({ id: todo.id, isDone: todo.isDone });
-              }}
-            >
-              완료
-            </button>
+            <div className="card-body">
+              <h2 className="card-title">{todo.title}</h2>
+              <p>{todo.contents}</p>
+              {todo.isDone ? <p>Done</p> : <p>Not done</p>}
+              <div className="card-actions justify-end">
+                <button
+                  className="btn btn-neutral"
+                  onClick={() => {
+                    alert("삭제하겠습니까?");
+                    deleteMutation.mutate(todo.id);
+                  }}
+                >
+                  삭제
+                </button>
+
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    editMutation.mutate({ id: todo.id, isDone: todo.isDone });
+                  }}
+                >
+                  {todo.isDone ? "취소" : "완료"}
+                </button>
+              </div>
+            </div>
           </div>
         );
       })}{" "}

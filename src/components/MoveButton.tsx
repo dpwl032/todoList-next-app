@@ -11,6 +11,7 @@ const MoveButton = () => {
         onClick={() => {
           router.push("/report");
         }}
+        className="mx-8 my-8 btn btn-outline btn-primary"
       >
         할일정보통계보러가기
       </button>

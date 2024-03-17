@@ -6,28 +6,16 @@
   },
   "todos": [
     {
-      "id": "1",
-      "title": "커피 마시기",
-      "contents": "샌드커피 마시기",
-      "isDone": false
-    },
-    {
-      "id": "2",
-      "title": "영화 보기",
-      "contents": "파묘 2회차",
-      "isDone": true
-    },
-    {
       "id": "3",
       "title": "next.js 복습하기",
       "contents": "과제 늦지않게 제출하기",
-      "isDone": true
+      "isDone": false
     },
     {
-      "id": "d7ea",
-      "title": "ㅇ",
-      "contents": "ㅇ",
-      "isDone": true
+      "id": "3aac",
+      "title": "zz",
+      "contents": "zz",
+      "isDone": false
     }
   ]
 }

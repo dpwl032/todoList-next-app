@@ -14,19 +14,29 @@ const SsrPage = async () => {
   const todos: Todo[] = await response.json();
 
   return (
-    <div className="grid grid-cols-4 gap-4">
-      {todos.map((item) => (
-        <div>
-          <p>{item.title}</p>
-          <p>{item.contents}</p>
-          {item.isDone ? <p>Done</p> : <p>Not done</p>}
-          <br />
-        </div>
-      ))}
-      <Link href="/report">할일정보통계보러가기</Link>
-      <button className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 ">
-        dd
-      </button>
+    <div>
+      <div>
+        {todos.map((item) => (
+          <div className="mx-8 my-8 card card-compact w-96 bg-base-100 shadow-xl">
+            <div className="card-body">
+              <h2 className="card-title">{item.title}</h2>
+              <p>{item.contents}</p>
+              <div className="card-actions justify-end">
+                {item.isDone ? (
+                  <button className="btn btn-primary">Done</button>
+                ) : (
+                  <button className="btn btn-primary">Not done</button>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div>
+        <button className="mx-8 my-8 btn btn-outline btn-primary">
+          <Link href="/report">할일정보통계보러가기</Link>
+        </button>
+      </div>
     </div>
   );
 };
