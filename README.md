@@ -16,6 +16,7 @@
 - Development : typescript, React
 - Framework : Next.js
 - DB : json-server
+- Design System: DaisyUI
 
 <br>
 
